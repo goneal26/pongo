@@ -1,0 +1,8 @@
+gosub main;
+
+sub main() {
+	let msg = "Hello, world!\n";
+	print msg;
+
+	exit;
+}
