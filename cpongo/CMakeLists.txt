@@ -5,4 +5,6 @@ set(CMAKE_C_STANDARD 11)
 
 add_executable(cpongo main.c
         scanner.c
-        scanner.h)
+        scanner.h
+        token.c
+        token.h)
