@@ -7,4 +7,6 @@ add_executable(cpongo main.c
         scanner.c
         scanner.h
         token.c
-        token.h)
+        token.h
+        interpreter.c
+        interpreter.h)

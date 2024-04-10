@@ -14,13 +14,13 @@ These are the language's primitive types.
  - **Strings**, encoded the same way as Strings in C as well as using the same escape characters (such as `\n`) (ASCII characters terminated by an implied null character `\0`) represented with literals `"like this"`
  - **Nil**, a no-value/null data type, represented as `nil`
 
-Primitive-type variables are defined using the keyword `let`:
+Primitive-type variables are defined in a similar way to python:
 ```
-let n = 13;
-let x = 44.5;
-let truth = true;
-let empty = nil;
-let msg = "Hello, world!\n";
+n = 13;
+x = 44.5;
+truth = true;
+empty = nil;
+msg = "Hello, world!\n";
 ```
 
 <!--
@@ -57,18 +57,18 @@ x * y;
 ### tostring
 `tostring` is a unary operator that converts any variable that gets passed to it into a string type, for example:
 ```
-let x = 3.5;
-let s = tostring x; // s is "3.5"
+x = 3.5;
+s = tostring x; // s is "3.5"
 
-let truth = tostring true; // "true"
-let fake = tostring false; // "false"
-let empty = tostring nil; // "nil"
+truth = tostring true; // "true"
+fake = tostring false; // "false"
+empty = tostring nil; // "nil"
 ```
 
 ### String Concatenation
 Pongo has a separate string concatenation operator taken from Lua, `..`, used to concatenate strings:
 ```
-let msg = "Hello " .. "world!";
+msg = "Hello " .. "world!";
 ```
 
 ### Comparison
@@ -95,7 +95,7 @@ true or false;
 ### Precedence and Grouping
 Pongo's rules regarding operator precedence are the same as C's. You can also group statements using parentheses:
 ```
-let average = (min + max) / 2;
+average = (min + max) / 2;
 ```
 
 
@@ -105,10 +105,10 @@ Statements in Pongo can consist of the expressions mentioned before terminated b
 <!-- TODO insert statement about blocks with { } and mention scoping -->
 
 ## Variables
-As I said earlier, primitive-type variables are defined with `let`, and arrays are defined with the bracket notation. Variables can be declared without being defined, with primitive variables being initially defined as `nil` and arrays being initially filled with `nil`:
+As I said earlier, primitive-type variables are defined using the assignment operator `=`, like in python, and arrays are defined with the bracket notation. Variables can be declared without being defined, with primitive variables being initially defined as `nil` and arrays being initially filled with `nil`:
 ```
-let x = 3;
-let y; // y = nil;
+x = 3;
+y; // y = nil;
 ```
 All variables in Pongo have global scope.
 <!-- TODO come up with way to have mutable vars -->
@@ -124,32 +124,46 @@ let arr2[3]; // arr2[3] = [nil, nil, nil];
 
 As is evident with the name, Pongo is all about a rather messy control flow, 'ping-ponging' around your code file. To do this, Pongo uses labels and goto's for its primary control flow.
 
-### Labels
-Pongo defines labels in a code block with the keyword `lbl`, like so:
+### Blocks
+Pongo defines "Blocks" (essentially labels, acting similar to functions/procedures with no arguments or returns) in a code block with the keyword `block`, like so:
 ```
-lbl test {
-	let x = 3.5;
+block Test {
+	x = 3.5;
 	print (tostring x);
 }; // notice the ';', this is important!
 ```
+
+*Note: I'd recommend having labels use 'PascalCase' to make them more distinct from variables*
 
 Label blocks are terminated by a `;`. Optionally, after the block's closing `}` but before the `;`, you can put in the name of another label to jump to after this block ends. If no label is provided, the program will continue onward (line by line) immediately after the label block. If the user puts "exit" here instead, after executing this block, the program will exit. For example:
 ```
 // program starts at the top
 
-let x = 3;
-let y = 2;
-let z;
+x = 3;
+y = 2;
+z;
 
-lbl test {
+block Test {
 	z = x * y;
-} main; // will jump to label "main" after executing this block's instructions
+} Main; // will jump to label "main" after executing this block's instructions
 
-lbl ignored {
+block Ignored {
 	z = x + y; // this block is ignored as the program jumps to "main".
 };
 
-lbl main {
-	print ("Final output: " .. (tostring z))
+block Main {
+	print ("Final output: " .. (tostring z));
 } exit; // program exits, printing "6"
 ```
+<!--
+	ALL KEYWORDS:
+	block (like labels)
+	exit (exit program)
+	true
+	false
+	nil (undefined variable)
+	makestring (convert to string operator)
+	print (print to console)
+	smash (kill variable, lets you redeclare it later in program, maybe)
+	thengoto ([condition] thengoto [blockname];)
+-->
