@@ -8,39 +8,14 @@ I originally started working on this language so that its interpreter could serv
 ## Data Types
 
 ### Primitives
-These are the language's primitive types.
- - **Booleans**, with the literal values `true` and `false`.
- - **Numbers**, 32-bit double precision floating point numbers represented with literals like `1234`, `12.32`, or `-3` (although I may make a 16-bit version of the language that uses signed shorts for its numbers later)
- - **Strings**, encoded the same way as Strings in C as well as using the same escape characters (such as `\n`) (ASCII characters terminated by an implied null character `\0`) represented with literals `"like this"`
- - **Nil**, a no-value/null data type, represented as `nil`
-
-Primitive-type variables are defined in a similar way to python:
+Pongo, because of its emphasis on 16-bit computing, solely uses signed 16-bit int variables, otherwise known as a "short". They are defined similarly to how they are in C:
 ```
-n = 13;
-x = 44.5;
-truth = true;
-empty = nil;
-msg = "Hello, world!\n";
+short n = 13;
+short x = 44;
+short h = 0xFFFF; // hex values can also be passed, with this corresponding to -1
 ```
 
-<!--
-### Non-Primitives
-These are the non-primitive types, i.e. the data structures that exist in the language.
-
-#### Arrays
-First there are **arrays**, working the same way that arrays in C do, with their size being set initially, only they can hold multiple different types. If an array is defined with a size but not populated in that same line, it is filled with `nil`. Arrays are also defined with the keyword `let`, as well as using brackets (`[` and `]`), for example:
-```
-let arr[5] = [0, nil, true, "hi", 13.2];
-let empty_arr[3];
-
-empty_arr[0] = "first";
-empty_arr[1] = 2;
-empty_arr[2] = 3.0;
-
-let n = empty_arr.length; // here, n=3
-let is_empty = arr.empty // true if array is nil for every element
-```
--->
+Despite these being the only type in the language thus far, they are still defined with the `short` keyword, as I intend to add other types to the language in the future.
 
 ## Expressions
 
@@ -50,25 +25,9 @@ Pongo uses your beloved operators from C:
 x + y;
 x - y;
 x / y;
+x % y;
 x * y;
 -x;
-```
-
-### tostring
-`tostring` is a unary operator that converts any variable that gets passed to it into a string type, for example:
-```
-x = 3.5;
-s = tostring x; // s is "3.5"
-
-truth = tostring true; // "true"
-fake = tostring false; // "false"
-empty = tostring nil; // "nil"
-```
-
-### String Concatenation
-Pongo has a separate string concatenation operator taken from Lua, `..`, used to concatenate strings:
-```
-msg = "Hello " .. "world!";
 ```
 
 ### Comparison
@@ -82,88 +41,122 @@ x == y;
 x != y;
 ```
 
-Note that these do enforce type-checking using the language's type system, so `"3" == 3` and `"true" == true` both output `false`, as differently typed variables are *never* equivalent. Also, checking if a variable is null or unassigned is as easy as `x == nil`.
+These boolean operators also return shorts, with 0 or 0x0000 representing 'false' and -1 or 0xffff representing 'true'. You can also simply write 'true' or 'false' and the language's interpreter will automatically change these to their numeric literal values.
 
-### Logical Operators
-Logical operators act as keywords in order to be more readable, similar to python and GDScript, but work pretty much the same as they do in every other language, operating on Boolean variables and outputting a Boolean variable. For example:
+### Logical/Bitwise Operators
+These operators appear as keywords in order to be more readable, similar to Python and GDScript. These perform bitwise For example:
 ```
 not true;
 true and false;
 true or false;
 ```
 
+These operate on all individual bits of each variable (you know, 'bitwise'). 
+
 ### Precedence and Grouping
 Pongo's rules regarding operator precedence are the same as C's. You can also group statements using parentheses:
 ```
-average = (min + max) / 2;
+short average = (min + max) / 2;
 ```
 
 
 ## Statements
-Statements in Pongo can consist of the expressions mentioned before terminated by `;` (a.k.a. expression statements).
+Statements in Pongo must end in `;`. <!-- TODO: maybe needs more info -->
 
-<!-- TODO insert statement about blocks with { } and mention scoping -->
+## Variables <!-- TODO: may be redundant section -->
+As I said earlier, variables are defined using the assignment operator `=`, like in Python. Variables can be declared without being defined, with primitive variables being initially defined as `0`:
+```
+short x = 3;
+short y; // y = 0;
+```
+All variables are visible to any lines of code or instructions that are executed after the variable is defined. But, if you want to "remove" or "free" the variable, freeing it from the memory of the program and resetting its visibility to the program with the keyword `smash` (which is, intentionally, a ping pong term).
 
-## Variables
-As I said earlier, primitive-type variables are defined using the assignment operator `=`, like in python, and arrays are defined with the bracket notation. Variables can be declared without being defined, with primitive variables being initially defined as `nil` and arrays being initially filled with `nil`:
 ```
-x = 3;
-y; // y = nil;
+short x = 3;
+smash x;
+short y = x; // program exits with error- x not defined/does not exist
 ```
-All variables in Pongo have global scope.
-<!-- TODO come up with way to have mutable vars -->
-<!--
-```
-let arr1[3] = [3, 4, 5];
-let arr2[3]; // arr2[3] = [nil, nil, nil];
-```
--->
-
 
 ## Control Flow
-
 As is evident with the name, Pongo is all about a rather messy control flow, 'ping-ponging' around your code file. To do this, Pongo uses labels and goto's for its primary control flow.
 
-### Blocks
-Pongo defines "Blocks" (essentially labels, acting similar to functions/procedures with no arguments or returns) in a code block with the keyword `block`, like so:
+### Labels
+A label is defined in the program using the keyword `lbl`:
 ```
-block Test {
-	x = 3.5;
-	print (tostring x);
-}; // notice the ';', this is important!
+lbl main;
+short x = 3;
+short y = 5;
+short z = y / x;
 ```
 
-*Note: I'd recommend having labels use 'PascalCase' to make them more distinct from variables*
+Personally, I recommend writing your label names in CAPITALS, so that it's clear to the author of the program or any reader that the label is not, in fact, the name of a variable.
 
-Label blocks are terminated by a `;`. Optionally, after the block's closing `}` but before the `;`, you can put in the name of another label to jump to after this block ends. If no label is provided, the program will continue onward (line by line) immediately after the label block. If the user puts "exit" here instead, after executing this block, the program will exit. For example:
+### Gotos
+The keyword `goto` causes the program to jump to the line of code defined at the label passed to it. This is where the control flow of the language can get messy, with potential to skip entire code blocks. For example:
 ```
-// program starts at the top
+goto main;
 
-x = 3;
-y = 2;
-z;
+lbl main;
+short pi = 22 / 7;
+goto next;
 
-block Test {
-	z = x * y;
-} Main; // will jump to label "main" after executing this block's instructions
+lbl skipped;
+short tau = pi * 2; // this code gets skipped after jumping to next!
 
-block Ignored {
-	z = x + y; // this block is ignored as the program jumps to "main".
-};
-
-block Main {
-	print ("Final output: " .. (tostring z));
-} exit; // program exits, printing "6"
+lbl next;
+short tau = pi / 2;
 ```
+
+### Conditional Gotos
+The closest thing Pongo has to if-statements is the keyword `thengoto`, appearing in the form `[condition] thengoto [label]`. It functions similarly to an operator, where if the condition on the left is true (i.e. returns -1 or 0xFFFF) then the program will jump to the specified label. For example:
+```
+// program to check if a number is even
+short x = input "Enter a positive number: "; // get user input
+
+((x % 2) == 0) thengoto EVEN;
+print "Number is odd"; // this line doesn't get jumped over if the number is odd
+
+lbl EVEN; // the following executes if the number is even
+print "Number is even.";
+// end of file, program stops
+```
+
+## Input/Output
+For the initial release of Pongo, the language uses simple input and output statements that work with shorts. For example, the input statement works like so:
+```
+short x = input "Input x: ";
+```
+The text "Input x: " is displayed in the terminal/standard output, and the user can input a single short literal (either in decimal, hex with a leading `0x`, or the boolean macros `true` and `false` for -1 and 0). When the user presses <kbd>Enter</kbd>,
+that input is stored in the variable declared in the program. If the user enters an invalid input (a character, String, or a number too large to be stored in a short), the program will exit and throw an error.
+
+
+Output works in a very similar way, using the `print` statement as follows:
+```
+print "Adding two numbers...";
+
+short x = input "First number: ";
+short y = input "Second number: ";
+short sum = x + y;
+
+print "Result: ";
+print sum;
+```
+
+The `print` statement takes a single variable and outputs it to the terminal/standard output.
+
+### String Literals
+
+
 <!--
 	ALL KEYWORDS:
-	block (like labels)
+	lbl (like labels)
+	short
 	exit (exit program)
-	true
-	false
-	nil (undefined variable)
-	makestring (convert to string operator)
-	print (print to console)
+	true (macro for -1)
+	false (macro for 0)
+	print (print to console, always on new line)
+	input
 	smash (kill variable, lets you redeclare it later in program, maybe)
+	goto
 	thengoto ([condition] thengoto [blockname];)
 -->
