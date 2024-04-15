@@ -209,4 +209,5 @@ Other types (such as 32 and 64 bit ints, floats, etc) I would also have as their
 	smashall (kill all variables in the program)
 	goto
 	thengoto ([condition] thengoto [labelname];)
+	time (string for amt of time program has been running up to that point)
 -->

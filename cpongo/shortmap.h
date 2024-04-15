@@ -23,5 +23,6 @@ typedef struct VarMap {
 void alloc_var(char* identifier, short value, VarMap map);
 short get(const char* identifier, VarMap map);
 void dealloc_var(const char* identifier, VarMap map);
+void dealloc_all(VarMap map);
 
 #endif //CPONGO_SHORTMAP_H

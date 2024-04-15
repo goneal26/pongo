@@ -13,4 +13,6 @@ add_executable(cpongo main.c
         execute.c
         execute.h
         parser.c
-        parser.h)
+        parser.h
+        operations.c
+        operations.h)

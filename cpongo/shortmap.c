@@ -138,3 +138,17 @@ void dealloc_var(const char* identifier, VarMap map) {
         error(buffer);
     }
 }
+
+/**
+ * De-allocate all variables from memory (i.e. "smashall")
+ * @param map: (VarMap) map struct
+ */
+void dealloc_all(VarMap map) {
+    for (int i = 0; i < MAX_MAP_SIZE; i++) {
+        List l = map.variables[i];
+        for (int j = 0; j < l.size; j++) {
+            list_remove(&l, i);
+        }
+    }
+    map.allocated = 0;
+}
