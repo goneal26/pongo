@@ -4,9 +4,13 @@ project(cpongo C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(cpongo main.c
-        scanner.c
-        scanner.h
-        token.c
-        token.h
-        interpreter.c
-        interpreter.h)
+        errors.c
+        errors.h
+        linked_list.c
+        linked_list.h
+        shortmap.c
+        shortmap.h
+        execute.c
+        execute.h
+        parser.c
+        parser.h)
