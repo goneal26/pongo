@@ -6,5 +6,6 @@
 #define CPONGO_PARSER_H
 
 void read_file(const char* path, char* output[]);
+void tokenize(char* instruction);
 
 #endif //CPONGO_PARSER_H

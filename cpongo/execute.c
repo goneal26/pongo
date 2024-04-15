@@ -6,3 +6,6 @@
 #include "shortmap.h"
 #include "string.h"
 
+void run_file(const char* path) {
+    char* file_content[80]
+}
