@@ -1,0 +1,32 @@
+goto MAIN;
+
+lbl MAIN;
+	short n = input "Enter number of terms (>2): ";
+	n <= 2 thengoto TOO_SMALL;
+	short first = 0;
+	short second = 1;
+	short next = first + second;
+	println first;
+	println second;
+	short i = 3;
+goto FIB;
+
+lbl FIB;
+	i <= n thengoto END;
+	println next;
+	first = second;
+	second = next;
+	next = first + second;
+	i = i + 1;
+goto FIB;
+
+lbl TOO_SMALL;
+	println "Input too small";
+	println;
+goto MAIN;
+
+lbl END;
+	print "Program completed with time: ";
+	print time;
+	println;
+exit;
