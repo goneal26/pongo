@@ -26,6 +26,7 @@ lbl TOO_SMALL;
 goto MAIN;
 
 lbl END;
+	smashall;
 	print "Program completed with time: ";
 	print time;
 	println;
