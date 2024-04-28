@@ -7,16 +7,16 @@ lbl MAIN;
 	short second = 1;
 	short next = first + second;
 	println first;
-	println second;
+	println second; // print first two terms (0 and 1)
 	short i = 3;
 goto FIB;
 
 lbl FIB;
-	i <= n thengoto END;
+	i <= n thengoto END; // end loop
 	println next;
 	first = second;
 	second = next;
-	next = first + second;
+	next = first + second; // calculate next term
 	i = i + 1;
 goto FIB;
 
@@ -26,8 +26,8 @@ lbl TOO_SMALL;
 goto MAIN;
 
 lbl END;
-	smashall;
+	smashall; // free all variables
 	print "Program completed with time: ";
-	print time;
+	print time; // print runtime
 	println;
 exit;

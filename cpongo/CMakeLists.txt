@@ -10,9 +10,10 @@ add_executable(cpongo main.c
         linked_list.h
         shortmap.c
         shortmap.h
-        execute.c
-        execute.h
-        parser.c
-        parser.h
         operations.c
-        operations.h)
+        operations.h
+        interpreter.c
+        interpreter.h
+        common.h
+        scanner.c
+        scanner.h)

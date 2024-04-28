@@ -6,7 +6,7 @@ Pongo is both named after the dog from the movie *One Hundred and One Dalmatians
 
 I originally started working on this language so that its interpreter could serve as my final project for my *Intro to Programming in C* course, with the goal of having the language's basic control flow, variables, functions, etc. implemented by the end of the project (with implementing Pongo's arrays as a stretch goal). These features will be in the Pongo 0.1 release, with arrays and other stretch goals being in the Pongo 0.2 release.
 
-Pongo somewhat fits into the C language family when it comes to syntax, mostly due to the use of semicolons to terminate statements and the use of `//` to mark an line comment. The semicolons were mostly added because it made the language much easier for the interpreter parse (as then I could just split-up the text by semicolons to get each instruction), as well as allowing for multiple instructions per line if the user desires.
+Pongo somewhat fits into the C language family when it comes to syntax, mostly due to the use of semicolons to terminate statements. From Python we get the use of `#` to mark a line comment. The semicolons were mostly added because it made the language much easier for the interpreter parse (as then I could just split-up the text by semicolons to get each instruction), as well as allowing for multiple instructions per line if the user desires.
 
 ## Data Types
 
@@ -16,9 +16,9 @@ Pongo, because of its emphasis on 16-bit computing, solely uses signed (2's comp
 ```
 short n = 13;
 short x = 44;
-short h = 0xFFFF; // hex values can also be passed, with this corresponding to -1
-// when using hex values literals, characters after the x are not case sensitive,
-// so 0xffff and 0xFFFF are both fine.
+short h = 0xFFFF; # hex values can also be passed, with this corresponding to -1
+# when using hex values literals, characters after the x are not case sensitive,
+# so 0xffff and 0xFFFF are both fine.
 ```
 
 As a reminder, the largest value a signed 16-bit number can hold is 32767 in decimal (or 0x7FFF in hex), and the smallest value is -32768 in decimal (or 0x8000 in hex). The language does have a way of handling overflows, described later.
@@ -49,7 +49,7 @@ x > y;
 x <= y;
 x >= y;
 x == y;
-x != y;
+not (x == y); # instead of "x != y"
 ```
 
 These boolean operators also return shorts, with 0 or 0x0000 representing 'false' and -1 or 0xFFFF representing 'true'. You can also simply write 'true' or 'false' and the language's interpreter will automatically change these to their numeric literal values. My reasoning for choosing -1 and 0xFFFF for 'true' instead of simply using 1 as C does is simple- the logical operators (explained in the next section) act as bitwise-operators. Applying a bitwise 'and' between a 16-bit number and 'true' should (in my opinion) return the original 16-bit number, and since applying a bitwise 'and' to a 16-bit number and 0xFFFF returns the original 16-bit number, and 0xFFFF in base 2 is the 2's complement representation of -1, it makes sense for 'true' to be a macro for -1 instead of 1 as it is in C.
@@ -77,7 +77,7 @@ short average = (min + max) / 2;
 As I said earlier, variables are defined using the assignment operator `=`, like in Python. Variables can be declared without being defined, with primitive variables being initially defined as `0`:
 ```
 short x = 3;
-short y; // y = 0;
+short y; # y = 0;
 ```
 Variable names/identifiers have a max character limit of 32 characters, and have the same naming conventions as in C. Personally, I prefer using `snake_case` for Pongo variables.
 
@@ -86,7 +86,7 @@ All variables are visible to any lines of code or instructions that are executed
 ```
 short x = 3;
 smash x;
-short y = x; // program exits with error- x not defined/does not exist
+short y = x; # program exits with error- x not defined/does not exist
 ```
 
 Under the hood, variables are stored in a structure similar to a table/dictionary using the identifier (string for the variable name) as a key and the short as a value. The `smash` keyword simply removes this entry from the table. This is important as the max size of the table (i.e. the maximum amount of variables a program can have allocated in memory at a given time) is 65536 (note- a single unsigned short, or two bytes), so using `smash` will free-up room for another variable. When the program exits, all variables are freed.
@@ -118,7 +118,7 @@ short pi = 22 / 7;
 goto next;
 
 lbl skipped;
-short tau = pi * 2; // this code gets skipped after jumping to next!
+short tau = pi * 2; # this code gets skipped after jumping to next!
 
 lbl next;
 short tau = pi / 2;
@@ -128,16 +128,16 @@ short tau = pi / 2;
 The closest thing Pongo has to if-statements is the keyword `thengoto`, appearing in the form `[condition] thengoto [label]`. It functions similarly to an operator, where if the condition on the left is true (i.e. returns -1 or 0xFFFF) then the program will jump to the specified label. For example:
 
 ```
-// program to check if a number is even
-short x = input "Enter a positive number: "; // get user input
+# program to check if a number is even
+short x = input "Enter a positive number: "; # get user input
 
 ((x % 2) == 0) thengoto EVEN;
-print "Number is odd"; // this line doesn't get jumped over if the number is odd
-exit; // exit the program here instead of the end of the file
+print "Number is odd"; # this line doesn't get jumped over if the number is odd
+exit; # exit the program here instead of the end of the file
 
-lbl EVEN; // the following executes if the number is even
+lbl EVEN; # the following executes if the number is even
 print "Number is even.";
-// end of file, program stops
+# end of file, program stops
 ```
 
 ## Input/Output
@@ -209,5 +209,5 @@ Other types (such as 32 and 64 bit ints, floats, etc) I would also have as their
 	smashall (kill all variables in the program)
 	goto
 	thengoto ([condition] thengoto [labelname];)
-	time (string for amt of time program has been running up to that point)
+	clock (string for amt of time program has been running up to that point)
 -->
