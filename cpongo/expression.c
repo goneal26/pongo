@@ -7,6 +7,7 @@
 #include <string.h>
 #include "common.h"
 #include "messages.h"
+#include <time.h>
 
 typedef enum {
     NOOP,
@@ -159,6 +160,10 @@ short convert_identifier(const char* source, const ShortTable* table) {
             return (signed short) 0xffff;
         } else if (strcmp(source, "false") == 0) {
             return (signed short) 0;
+        } else if (strcmp(source, "rand") == 0) { // adding rand!
+            srand(time(NULL));
+            int random_value = rand() % (0xffff + 1); // random num between 0 and 0xffff inclusive
+            return (signed short) random_value;
         } else {
             return get_value(source, table);
         }
