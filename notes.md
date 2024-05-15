@@ -61,14 +61,17 @@ For user input, use the `input` expression. This expression appears like so:
 	- A boolean macro: `true` (evaluated as `-1`) or `false` (evaluated as `0`). These ARE case sensitive.
 If the input does not match one of these conventions, or if no input is provided, the program will exit with an invalid input error.
 
+When the `input` expression is used, no other expressions can be present.
+
 NOTE: The `input` expression as well as the `print` and `println` statements are the only situations where the language will use strings, solely as string literals.
 
 ### Expressions
-Expressions use the same operators as C for basic arithmetic, and the same rules for precedence. You can also use parentheses just as in C.
+All expressions in the language are "simple": i.e. there are no sub-expressions or grouping with parentheses.
 
-Boolean expressions use boolean comparison operators (`==`, `<`, `>`, `<=`, `>=`) which evaluate to either `true` (`-1` or `0xffff`) or `false` (`0` or `0x0000`).
+Expressions use the same operators as C for basic arithmetic.
 
-There are also bitwise operators: `and`, `or`, and `not`. These perform bitwise operations on their two arguments (or one argument in the case of `not`).
+Boolean expressions use boolean comparison operators (`==`, `<`, `>`, `<=`, `>=`, `!=`) which evaluate to either `true` (`-1` or `0xffff`) or `false` (`0` or `0x0000`).
 
-NOTE: Notice how there's no `!=` operator. Instead of doing, say, `x != y;`, instead do something like `not (x == y);` which would produce the same effect.
+There are also bitwise operators: `&` for "and", `|` for "or", and `!` for "not". These perform bitwise operations on their two arguments (or one argument in the case of `!`).
 
+If an overflow error ever occurs (i.e. the output of an expression cannot fit into a short) an overflow error will be printed to the console with a line number, but the program will continue running.

@@ -1,0 +1,5 @@
+goto MAIN;
+
+lbl MAIN;
+    # feel free to put whatever you want in here!
+exit;
