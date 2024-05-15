@@ -2,9 +2,9 @@
 goto MAIN;
 
 lbl MAIN;
-    short answer = rand % 100;
+    short answer = rand % 1000;
     answer = answer + 1;
-    println "I am thinking of a number between 1 and 100.";
+    println "I am thinking of a number between 1 and 1000.";
     println "Make a guess!";
     short count = 0;
 goto GAME;
