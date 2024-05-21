@@ -14,3 +14,8 @@ add_executable(cpongo main.c
         interpreter.c
         interpreter.h
 )
+
+if (MSVC)
+    add_compile_options(/std:c11)  # Ensure C11 standard is used
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)  # Disable secure CRT warnings
+endif()
