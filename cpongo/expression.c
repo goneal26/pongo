@@ -28,27 +28,6 @@ typedef enum {
     LESS_EQUALS,
 } Operation;
 
-/* Created this for debugging
-char *opnames[] = {
-        "NOOP",
-        "ADD",
-        "SUBTRACT",
-        "MULTIPLY",
-        "DIVIDE",
-        "NEGATE",
-        "MOD",
-        "AND",
-        "OR",
-        "NOT",
-        "EQUALS",
-        "NOT_EQUALS",
-        "GREATER",
-        "LESS",
-        "GREATER_EQUALS",
-        "LESS_EQUALS",
-};
-*/
-
 typedef struct Expression {
     Operation operator;
     short operand1;
@@ -70,10 +49,7 @@ Operation get_operator(const char* source);
 short eval(const char* source, const ShortTable* table) {
     Expression e;
     new_expression(source, &e, table);
-    // printf("Arg 1: %d\n", e.operand1);
-    // printf("Arg 2: %d\n", e.operand2);
-    // printf("Operation: %s\n", opnames[e.operator]);
-    // printf("Is it unary? %d\n", e.is_unary);
+    
     return evalexpr(e);
 }
 
@@ -188,14 +164,10 @@ void new_expression(const char* source, Expression *e, const ShortTable* table) 
     char op2[length];
     Operation operator;
     trim(source, trimmed);
-    // printf("Trimmed expression: \"%s\"\n", trimmed);
 
     operator = get_operator(trimmed);
     get_second_operand(trimmed, op2);
     get_first_operand(trimmed, op1);
-
-    // printf("Got first arg: \"%s\"\n", op1);
-    // printf("Got second arg: \"%s\"\n", op2);
 
     if (op1[0] == '\0') {
         e->is_unary = true;
@@ -288,7 +260,6 @@ Operation get_operator(const char* source) {
                         return EQUALS;
                 } // shouldn't need a default case, this is all the possible cases here
             } else { // c is a single-character operator
-                // printf("Found opchar: %c\n", c);
                 switch (c) {
                     case '+':
                         return ADD;
@@ -312,7 +283,6 @@ Operation get_operator(const char* source) {
                     case '<':
                         return LESS;
                     case '!':
-                        // printf("Found NOT\n");
                         return NOT;
                     default:
                         continue;
@@ -323,7 +293,6 @@ Operation get_operator(const char* source) {
         source++;
     }
 
-    // printf("Am I getting to here?\n");
     // if no operators found, return noop
     return NOOP;
 }
