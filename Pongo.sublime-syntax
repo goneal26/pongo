@@ -1,0 +1,25 @@
+%YAML 1.2
+---
+
+name: Pongo
+# See http://www.sublimetext.com/docs/syntax.html
+file_extensions:
+  - pgo
+scope: source.pongo
+contexts:
+  main:
+    - match: '\b(goto|lbl|thengoto|short)\b'
+      scope: keyword.control.pongo # "red"
+    - match: '\b(<=|>=|==|+|-|*|/|%|=)\b'
+      scope: keyword.operator.pongo # white
+    - match: '"[^"]*"'
+      scope: string.quoted.double.pongo # green
+    - match: '#.*$'
+      scope: comment.line.pongo # grey
+    - match: '\d+'
+      scope: constant.numeric.pongo # indigo/violet
+    - match: '\b(print|println|input|clock|rand)\b'
+      scope: variable.function.pongo # aqua
+    - match: '\b(smash|smashall|exit)\b'
+      scope: support.pongo # light orange
+      

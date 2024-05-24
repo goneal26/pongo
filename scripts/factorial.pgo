@@ -1,0 +1,25 @@
+goto MAIN;
+
+lbl MAIN;
+	println "This program gets the factorial of a number.";
+	short n = input "Enter a non-negative number: ";
+	# funnily enough, if n > 7 then we get an overflow
+	short out = n;
+	short i = n - 1;
+goto LOOP;
+
+lbl LOOP;
+	i <= 0 thengoto END;
+	out = out * i;
+	i = i - 1;
+goto LOOP;
+
+lbl END;
+	print n;
+	print "! = ";
+	print out;
+	println;
+	print "Program execution time (seconds): ";
+	clock;
+	println;
+exit;

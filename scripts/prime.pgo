@@ -1,0 +1,32 @@
+goto MAIN;
+
+lbl MAIN;
+	println "This program will tell you if a number is prime.";
+	short x = input "Enter a positive number: ";
+	short i = 2;
+	short mod;
+	x <= 1 thengoto NOTPRIME; # corner case
+goto LOOP;
+
+lbl LOOP;
+	x == i thengoto PRIME; # checking prime
+	mod = x % i;
+	mod == 0 thengoto NOTPRIME; # base cases
+	i = i + 1;
+goto LOOP;
+
+lbl NOTPRIME;
+	print x;
+	println " is not prime.";
+goto END;
+
+lbl PRIME;
+	print x;
+	println " is prime.";
+goto END;
+
+lbl END;
+	print "Program execution time (seconds): ";
+	clock; # TODO change clock printing on new line
+	println;
+exit;
