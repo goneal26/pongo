@@ -15,6 +15,9 @@ add_executable(cpongo main.c
         interpreter.h
         token.c
         token.h
+        scanner.c
+        scanner.h
+        cvector.h
 )
 
 if (MSVC)

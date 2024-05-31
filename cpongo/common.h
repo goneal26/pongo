@@ -8,5 +8,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "messages.h"
 
 #endif //CPONGO_COMMON_H
