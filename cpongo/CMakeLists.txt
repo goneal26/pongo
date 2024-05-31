@@ -13,6 +13,8 @@ add_executable(cpongo main.c
         variable_table.h
         interpreter.c
         interpreter.h
+        token.c
+        token.h
 )
 
 if (MSVC)
