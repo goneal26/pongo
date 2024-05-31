@@ -47,6 +47,6 @@ typedef struct token {
     int line;
 } Token;
 
-void print_token(Token t);
+void print_token(const Token *t);
 
 #endif //CPONGO_TOKEN_H

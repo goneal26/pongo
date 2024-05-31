@@ -6,10 +6,10 @@
 #include "common.h"
 #include "string.h"
 
-void print_token(Token t) {
+void print_token(const Token *t) {
     char type[81] = {0};
 
-    switch (t.type) {
+    switch (t->type) {
         case LEFT_PAREN:
             strcpy(type, "LEFT_PAREN");
             break;
@@ -129,5 +129,5 @@ void print_token(Token t) {
             break;
     }
 
-    printf("%s \"%s\", line %d\n", type, t.lexeme, t.line);
+    printf("%s \"%s\", line %d\n", type, t->lexeme, t->line);
 }
