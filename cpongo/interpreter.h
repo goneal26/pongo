@@ -1,10 +1,10 @@
 //
-// Created by Tre on 5/14/2024.
+// Created by Tre on 5/31/24.
 //
 
 #ifndef CPONGO_INTERPRETER_H
 #define CPONGO_INTERPRETER_H
 
-void run_file(const char* filepath);
+void interpret(const char *source);
 
 #endif //CPONGO_INTERPRETER_H

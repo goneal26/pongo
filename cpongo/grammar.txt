@@ -1,0 +1,47 @@
+// https://craftinginterpreters.com/parsing-expressions.html
+
+// TODO left off here, let's write a parser, huh?
+// a formal grammar for Pongo:
+
+program -> statement* EOF;
+statement -> ( declare_statement
+             | assign_statement
+             | print_statement
+             | println_statement
+             | goto_statement
+             | thengoto statement
+             | label_statement
+             | smash_statement
+             | "exit"
+             | "clock"
+             | "smashall" ) ";" ;
+
+declare_statement -> "short" VARNAME ( "=" expression )? ;
+assign_statement -> VARNAME "=" expression ;
+print_statement -> "print" ( STRING | expression ) ;
+println_statement -> "println" ( STRING | expression )? ;
+goto_statement -> "goto" LABELNAME ;
+thengoto_statement -> expression "thengoto" LABELNAME ;
+label_statement -> "lbl" LABELNAME ;
+smash_statement -> "smash" VARNAME ;
+
+expression -> disjunction | input ;
+
+// TODO ternary-esque or conditional operators?
+// ternary -> expression ( "?" expression ( ":" expression )? )? ;
+// conditional -> expression ( "if" expression ( "else" expression )? )? ;
+
+input -> "input" STRING ;
+
+disjunction -> conjunction ( "|" conjunction )* ;
+conjunction -> equality ( "&" equality )* ;
+equality -> comparison ( ( "!=" | "==" ) comparison )* ;
+comparison -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+term -> factor ( ( "-" | "-" ) factor )* ;
+factor -> unary ( ( "/" | "*" | "%" ) unary )* ;
+unary -> ( "!" | "-" | "+" ) unary
+         | primary ;
+primary -> DECIMAL | HEX | VARNAME | "true" | "false" | "rand"
+           | "(" expression ")" ;
+
+
