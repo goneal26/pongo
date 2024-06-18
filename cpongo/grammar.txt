@@ -1,6 +1,5 @@
 // https://craftinginterpreters.com/parsing-expressions.html
 
-// TODO left off here, let's write a parser, huh?
 // a formal grammar for Pongo:
 
 program -> statement* EOF;
@@ -26,10 +25,6 @@ label_statement -> "lbl" LABELNAME ;
 smash_statement -> "smash" VARNAME ;
 
 expression -> disjunction | input ;
-
-// TODO ternary-esque or conditional operators?
-// ternary -> expression ( "?" expression ( ":" expression )? )? ;
-// conditional -> expression ( "if" expression ( "else" expression )? )? ;
 
 input -> "input" STRING ;
 

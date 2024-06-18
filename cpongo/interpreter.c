@@ -7,6 +7,7 @@
 #include "common.h"
 #include "scanner.h"
 #include <string.h>
+#include <time.h>
 
 Token instructions[80][400]; // TODO hardcoded size for now
 
@@ -166,21 +167,42 @@ static void print_source_line(int line, const char *source) {
     }
 }
 
-static void store_labels() {
+static void store_labels(const char *source) {
     // TODO
 }
 
-static void full_scan() {
-    Token current;
-    int token_counter;
-    do {
-        current = scan_token();
-
-    } while (current.type != TOKEN_EOF);
-}
-
 void interpret(const char *source) {
-    print_source_line(10, source);
+    init_scanner(source);
+    Token current_token;
+    int last_line = 0;
+    clock_t start_time = clock();
 
+    double time_taken;
+
+    bool seen_quote = false;
+    bool seen_paren = false;
+
+    store_labels(source);
+
+    do {
+        current_token = scan_token();
+
+        switch (current_token.type) {
+            case TOKEN_EXIT: // exiting the program
+                printf("\nProgram exited successfully.\n");
+                exit(0);
+                break;
+            case TOKEN_CLOCK:
+                time_taken = (double) (clock() - start_time) / CLOCKS_PER_SEC;
+                printf("%f", time_taken);
+                break;
+            case TOKEN_SEMICOLON:
+                // TODO
+        }
+
+        last_line = current_token.line;
+    } while (current_token.type != TOKEN_EOF);
+
+    // TODO remove this before merging to main
     printf("\nProgram exited successfully.\n");
 }
