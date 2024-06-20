@@ -148,27 +148,6 @@ static void branch(const Token *t) {
     // TODO
 }
 
-// print a line from the source file (without leading spaces)
-static void print_source_line(int line, const char *source) {
-    int counter = 1;
-
-    putchar('\n');
-    printf("%d | ", line);
-    bool seen_char = false;
-    while (*source != 0 && *source != EOF) {
-        if (*source == '\n') counter++;
-
-        if (counter == line) {
-            if ((*source != ' ' && *source != '\t') || seen_char == true) {
-                seen_char = true;
-                putchar(*source);
-            }
-        }
-
-        source++;
-    }
-}
-
 static void full_scan(const char *source) {
     init_scanner(source);
     Token t;
@@ -192,7 +171,6 @@ void interpret(const char *source) {
     full_scan(source);
 
     for (int pc = 0; pc < 80; pc++) {
-        bool seen_semicolon = false;
         for (int i = 0; i < 400; i++) {
             Token t = instructions[pc][i];
             print_token(&t);
@@ -201,12 +179,12 @@ void interpret(const char *source) {
                 pc++;
             }
             if (t.type == TOKEN_EOF) {
-                goto EXIT; // wow, a valid use of goto!
+                goto EXIT; // wow, a valid use of a goto!
             }
         }
     }
 
     EXIT:
-    // TODO remove this before merging to main
-    printf("\nProgram exited successfully.\n");
+    printf("\n\nProgram exited successfully.\n");
+    // TODO maybe remove this before merging to main
 }

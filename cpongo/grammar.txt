@@ -1,42 +1,40 @@
 // https://craftinginterpreters.com/parsing-expressions.html
 
-// a formal grammar for Pongo:
+// a formal grammar for Pongo, using EBNF notation:
 
-program -> statement* EOF;
-statement -> ( declare_statement
+program = { statement }, EOF ;
+statement = ( declare_statement
              | assign_statement
              | print_statement
              | println_statement
              | goto_statement
-             | thengoto statement
+             | thengoto_statement
              | label_statement
              | smash_statement
              | "exit"
              | "clock"
-             | "smashall" ) ";" ;
+             | "smashall" ), ";" ;
 
-declare_statement -> "short" VARNAME ( "=" expression )? ;
-assign_statement -> VARNAME "=" expression ;
-print_statement -> "print" ( STRING | expression ) ;
-println_statement -> "println" ( STRING | expression )? ;
-goto_statement -> "goto" LABELNAME ;
-thengoto_statement -> expression "thengoto" LABELNAME ;
-label_statement -> "lbl" LABELNAME ;
-smash_statement -> "smash" VARNAME ;
+declare_statement = "short", VARNAME, [ "=", expression ] ;
+assign_statement = VARNAME, "=", expression ;
+print_statement = "print", ( string | expression ) ;
+println_statement = "println", [ string | expression ] ;
+goto_statement = "goto", LABELNAME ;
+thengoto_statement = expression, "thengoto", LABELNAME ;
+label_statement = "lbl", LABELNAME ;
+smash_statement = "smash", VARNAME ;
 
-expression -> disjunction | input ;
+expression = disjunction | input ;
 
-input -> "input" STRING ;
+input = "input", string ;
+string = "\"", TEXT, "\""
 
-disjunction -> conjunction ( "|" conjunction )* ;
-conjunction -> equality ( "&" equality )* ;
-equality -> comparison ( ( "!=" | "==" ) comparison )* ;
-comparison -> term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
-term -> factor ( ( "-" | "-" ) factor )* ;
-factor -> unary ( ( "/" | "*" | "%" ) unary )* ;
-unary -> ( "!" | "-" | "+" ) unary
-         | primary ;
-primary -> DECIMAL | HEX | VARNAME | "true" | "false" | "rand"
-           | "(" expression ")" ;
-
-
+disjunction = conjunction, { "|", conjunction } ;
+conjunction = equality, { "&", equality } ;
+equality = comparison, { ( "!=" | "==" ), comparison } ;
+comparison = term, { ( ">" | ">=" | "<" | "<=" ), term } ;
+term = factor, { ( "-" | "+" ), factor } ;
+factor = unary, { ( "/" | "*" | "%" ), unary } ;
+unary = ( ( "!" | "-" | "+" ), unary ) | primary ;
+primary = DECIMAL | HEX | VARNAME | "true" | "false" | "rand"
+           | "(", expression, ")" ;
