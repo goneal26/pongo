@@ -31,27 +31,30 @@ static bool expect(TokenType symbol) {
  *           | "(", expression, ")" ;
  */
 static void primary() {
-    switch (current.type) {
-        case TOKEN_DECIMAL:
-        case TOKEN_HEX:
-        case TOKEN_IDENTIFIER: // TODO figure out if identifier is for a var or label
-        case TOKEN_TRUE:
-        case TOKEN_FALSE:
-        case TOKEN_RAND:
-            break;
-        case TOKEN_LEFT_PAREN:
-            expression();
-            expect(TOKEN_RIGHT_PAREN);
-            break;
-        default:
-            // TODO syntax error
-            nextsym();
-            break;
+    if (accept(TOKEN_LEFT_PAREN)) {
+        expression();
+        expect(TOKEN_RIGHT_PAREN);
+    } else if (
+            accept(TOKEN_DECIMAL) ||
+            accept(TOKEN_HEX) ||
+            accept(TOKEN_IDENTIFIER) ||
+            accept(TOKEN_TRUE) ||
+            accept(TOKEN_FALSE) ||
+            accept(TOKEN_RAND)
+            ) {
+        ;
+    } else {
+        // TODO syntax error
     }
 }
 
 static void unary() {
-    // TODO
+    if (current.type == TOKEN_NOT || current.type == TOKEN_MINUS || current.type == TOKEN_PLUS) {
+        nextsym(); // should be right?
+        unary();
+    } else {
+        primary();
+    }
 }
 
 /*
@@ -124,4 +127,5 @@ static void disjunction() {
         conjunction();
     }
 }
+
 
