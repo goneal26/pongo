@@ -12,4 +12,5 @@ add_executable(cpongo main.c
         scanner.h
         parser.c
         parser.h
+        cvector.h
 )

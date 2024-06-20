@@ -1,15 +1,14 @@
 //
 // Created by Tre on 5/31/24.
-// test path:
-// /home/aiko/Desktop/pongo/fibonacci.pgo
+//
 
 #include "interpreter.h"
 #include "common.h"
 #include "scanner.h"
 #include <string.h>
-#include <time.h>
 
-Token instructions[80][400]; // TODO hardcoded size for now
+Token instructions[80][400]; // TODO hardcoded size for now, will use cvector later?
+// (80 tokens per instruction, 400 instructions)
 
 static void print_token(const Token *t) {
     char type_string[80] = {0};
@@ -149,60 +148,65 @@ static void branch(const Token *t) {
     // TODO
 }
 
-static void print_clock() {
-    // TODO
-}
-
-// print a line from the source file (including whitespace)
+// print a line from the source file (without leading spaces)
 static void print_source_line(int line, const char *source) {
     int counter = 1;
 
     putchar('\n');
+    printf("%d | ", line);
+    bool seen_char = false;
     while (*source != 0 && *source != EOF) {
         if (*source == '\n') counter++;
 
-        if (counter == line) putchar(*source);
+        if (counter == line) {
+            if ((*source != ' ' && *source != '\t') || seen_char == true) {
+                seen_char = true;
+                putchar(*source);
+            }
+        }
 
         source++;
     }
 }
 
-static void store_labels(const char *source) {
-    // TODO
+static void full_scan(const char *source) {
+    init_scanner(source);
+    Token t;
+
+    int token_counter = 0;
+    int instruction_counter = 0;
+    do {
+        t = scan_token();
+
+        instructions[instruction_counter][token_counter] = t;
+
+        if (t.type == TOKEN_SEMICOLON) {
+            instruction_counter++;
+        }
+
+        token_counter++;
+    } while (t.type != TOKEN_EOF);
 }
 
 void interpret(const char *source) {
-    init_scanner(source);
-    Token current_token;
-    int last_line = 0;
-    clock_t start_time = clock();
+    full_scan(source);
 
-    double time_taken;
-
-    bool seen_quote = false;
-    bool seen_paren = false;
-
-    store_labels(source);
-
-    do {
-        current_token = scan_token();
-
-        switch (current_token.type) {
-            case TOKEN_EXIT: // exiting the program
-                printf("\nProgram exited successfully.\n");
-                exit(0);
-                break;
-            case TOKEN_CLOCK:
-                time_taken = (double) (clock() - start_time) / CLOCKS_PER_SEC;
-                printf("%f", time_taken);
-                break;
-            case TOKEN_SEMICOLON:
-                // TODO
+    for (int pc = 0; pc < 80; pc++) {
+        bool seen_semicolon = false;
+        for (int i = 0; i < 400; i++) {
+            Token t = instructions[pc][i];
+            print_token(&t);
+            if (t.type == TOKEN_SEMICOLON) {
+                printf("\n");
+                pc++;
+            }
+            if (t.type == TOKEN_EOF) {
+                goto EXIT; // wow, a valid use of goto!
+            }
         }
+    }
 
-        last_line = current_token.line;
-    } while (current_token.type != TOKEN_EOF);
-
+    EXIT:
     // TODO remove this before merging to main
     printf("\nProgram exited successfully.\n");
 }
