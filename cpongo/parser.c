@@ -7,11 +7,26 @@
 #include "common.h"
 #include "scanner.h"
 
-Token current;
-bool panicking = false;
+typedef struct {
+    Token current;
+    Token *tokens;
+    bool panicking;
+} Parser;
+
+Parser parser;
+
+void init_parser(const Token *tokens) {
+    parser.tokens = tokens;
+    parser.current = *tokens;
+    parser.panicking = false;
+}
+
+static void nextsym() {
+    parser.current = *(parser.tokens++);
+}
 
 static bool accept(TokenType symbol) {
-    if (current.type == symbol) {
+    if (parser.current.type == symbol) {
         nextsym();
         return true;
     }
@@ -49,7 +64,9 @@ static void primary() {
 }
 
 static void unary() {
-    if (current.type == TOKEN_NOT || current.type == TOKEN_MINUS || current.type == TOKEN_PLUS) {
+    if (parser.current.type == TOKEN_NOT ||
+    parser.current.type == TOKEN_MINUS ||
+    parser.current.type == TOKEN_PLUS) {
         nextsym(); // should be right?
         unary();
     } else {
@@ -62,7 +79,9 @@ static void unary() {
  */
 static void factor() {
     unary();
-    while (current.type == TOKEN_SLASH || current.type == TOKEN_STAR || current.type == TOKEN_PERCENT) {
+    while (parser.current.type == TOKEN_SLASH ||
+    parser.current.type == TOKEN_STAR ||
+    parser.current.type == TOKEN_PERCENT) {
         nextsym();
         unary();
     }
@@ -73,7 +92,7 @@ static void factor() {
  */
 static void term() {
     factor();
-    while (current.type == TOKEN_PLUS || current.type == TOKEN_MINUS) {
+    while (parser.current.type == TOKEN_PLUS || parser.current.type == TOKEN_MINUS) {
         nextsym();
         factor();
     }
@@ -85,10 +104,10 @@ static void term() {
 static void comparison() {
     term();
     while (
-        current.type == TOKEN_LESS ||
-        current.type == TOKEN_GREATER ||
-        current.type == TOKEN_LESS_EQUAL ||
-        current.type == TOKEN_GREATER_EQUAL
+        parser.current.type == TOKEN_LESS ||
+        parser.current.type == TOKEN_GREATER ||
+        parser.current.type == TOKEN_LESS_EQUAL ||
+        parser.current.type == TOKEN_GREATER_EQUAL
     ) {
         nextsym();
         term();
@@ -100,7 +119,7 @@ static void comparison() {
  */
 static void equality() {
     comparison();
-    while (current.type == TOKEN_EQUAL || current.type == TOKEN_NOT_EQUAL) {
+    while (parser.current.type == TOKEN_EQUAL || parser.current.type == TOKEN_NOT_EQUAL) {
         nextsym();
         comparison();
     }
@@ -111,7 +130,7 @@ static void equality() {
  */
 static void conjunction() {
     equality();
-    while (current.type == TOKEN_AND) {
+    while (parser.current.type == TOKEN_AND) {
         nextsym();
         equality();
     }
@@ -122,10 +141,15 @@ static void conjunction() {
  */
 static void disjunction() {
     conjunction();
-    while (current.type == TOKEN_OR) {
+    while (parser.current.type == TOKEN_OR) {
         nextsym();
         conjunction();
     }
+}
+
+
+static void expression() {
+
 }
 
 
