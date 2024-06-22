@@ -241,8 +241,7 @@ Token scan_token() {
                     match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER
             );
         case '"': return string();
+        default:
+            return make_token(TOKEN_UNKNOWN);
     }
-
-    fprintf(stderr, "Error: unexpected character.\n");
-    exit(1);
 }

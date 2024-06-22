@@ -56,7 +56,8 @@ typedef enum {
 
     // control flow
     TOKEN_GOTO, TOKEN_THENGOTO, TOKEN_LABEL,
-    TOKEN_EOF
+    TOKEN_EOF,
+    TOKEN_UNKNOWN
 } TokenType;
 
 typedef struct {

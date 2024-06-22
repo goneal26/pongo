@@ -1,13 +1,19 @@
 //
 // Created by Tre on 6/17/24.
-// Recursive descent parser
+// Recursive descent parser which utilizes an AST
 //
 
 #include "parser.h"
 #include "common.h"
 #include "scanner.h"
 
-static void expression();
+typedef struct ASTNode {
+    struct ASTNode *left;
+    struct ASTNode *right;
+    TokenType type;
+    char *value;
+} ASTNode;
+
 
 typedef struct {
     Token *tokens;
@@ -17,6 +23,9 @@ typedef struct {
 } Parser;
 
 Parser parser;
+ASTNode ast;
+
+static void expression();
 
 void init_parser(Token *tokens) {
     parser.tokens = tokens;
@@ -145,18 +154,6 @@ static void expression() {
         input();
     } else {
         disjunction();
-    }
-}
-
-static void statement() {
-    if (match(TOKEN_SHORT)) {
-        declare_statement();
-    } else if
-}
-
-static void program() {
-    while (peek().type != TOKEN_EOF) {
-        statement();
     }
 }
 
