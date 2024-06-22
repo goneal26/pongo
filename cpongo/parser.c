@@ -7,37 +7,40 @@
 #include "common.h"
 #include "scanner.h"
 
+static void expression();
+
 typedef struct {
-    Token current;
     Token *tokens;
     bool panicking;
+    size_t current;
+    size_t length;
 } Parser;
 
 Parser parser;
 
-void init_parser(const Token *tokens) {
+void init_parser(Token *tokens) {
     parser.tokens = tokens;
-    parser.current = *tokens;
+    parser.current = 0;
     parser.panicking = false;
 }
 
-static void nextsym() {
-    parser.current = *(parser.tokens++);
+static Token peek() {
+    if (parser.current < parser.length) {
+        return parser.tokens[parser.current];
+    }
 }
 
-static bool accept(TokenType symbol) {
-    if (parser.current.type == symbol) {
-        nextsym();
-        return true;
+static Token advance() {
+    if (parser.current < parser.length) {
+        return parser.tokens[parser.current++];
     }
-    return false;
 }
 
-static bool expect(TokenType symbol) {
-    if (accept(symbol)) {
+static bool match(TokenType type) {
+    if (peek().type == type) {
+        advance();
         return true;
     }
-    // TODO error message handling here?
     return false;
 }
 
@@ -46,16 +49,18 @@ static bool expect(TokenType symbol) {
  *           | "(", expression, ")" ;
  */
 static void primary() {
-    if (accept(TOKEN_LEFT_PAREN)) {
+    if (match(TOKEN_LEFT_PAREN)) {
         expression();
-        expect(TOKEN_RIGHT_PAREN);
+        if (!match(TOKEN_RIGHT_PAREN)) {
+            // TODO missing parentheses error
+        }
     } else if (
-            accept(TOKEN_DECIMAL) ||
-            accept(TOKEN_HEX) ||
-            accept(TOKEN_IDENTIFIER) ||
-            accept(TOKEN_TRUE) ||
-            accept(TOKEN_FALSE) ||
-            accept(TOKEN_RAND)
+            match(TOKEN_DECIMAL) ||
+            match(TOKEN_HEX) ||
+            match(TOKEN_IDENTIFIER) ||
+            match(TOKEN_TRUE) ||
+            match(TOKEN_FALSE) ||
+            match(TOKEN_RAND)
             ) {
         ;
     } else {
@@ -64,10 +69,7 @@ static void primary() {
 }
 
 static void unary() {
-    if (parser.current.type == TOKEN_NOT ||
-    parser.current.type == TOKEN_MINUS ||
-    parser.current.type == TOKEN_PLUS) {
-        nextsym(); // should be right?
+    if (match(TOKEN_NOT) || match(TOKEN_PLUS) || match(TOKEN_MINUS)) {
         unary();
     } else {
         primary();
@@ -79,10 +81,7 @@ static void unary() {
  */
 static void factor() {
     unary();
-    while (parser.current.type == TOKEN_SLASH ||
-    parser.current.type == TOKEN_STAR ||
-    parser.current.type == TOKEN_PERCENT) {
-        nextsym();
+    while (match(TOKEN_SLASH) || match(TOKEN_STAR) || match(TOKEN_PERCENT)) {
         unary();
     }
 }
@@ -92,8 +91,7 @@ static void factor() {
  */
 static void term() {
     factor();
-    while (parser.current.type == TOKEN_PLUS || parser.current.type == TOKEN_MINUS) {
-        nextsym();
+    while (match(TOKEN_PLUS) || match(TOKEN_MINUS)) {
         factor();
     }
 }
@@ -103,13 +101,7 @@ static void term() {
  */
 static void comparison() {
     term();
-    while (
-        parser.current.type == TOKEN_LESS ||
-        parser.current.type == TOKEN_GREATER ||
-        parser.current.type == TOKEN_LESS_EQUAL ||
-        parser.current.type == TOKEN_GREATER_EQUAL
-    ) {
-        nextsym();
+    while (match(TOKEN_GREATER) || match(TOKEN_LESS) || match(TOKEN_LESS_EQUAL) || match(TOKEN_GREATER_EQUAL)) {
         term();
     }
 }
@@ -119,8 +111,7 @@ static void comparison() {
  */
 static void equality() {
     comparison();
-    while (parser.current.type == TOKEN_EQUAL || parser.current.type == TOKEN_NOT_EQUAL) {
-        nextsym();
+    while (match(TOKEN_EQUAL) || match(TOKEN_NOT_EQUAL)) {
         comparison();
     }
 }
@@ -130,8 +121,7 @@ static void equality() {
  */
 static void conjunction() {
     equality();
-    while (parser.current.type == TOKEN_AND) {
-        nextsym();
+    while (match(TOKEN_AND)) {
         equality();
     }
 }
@@ -141,15 +131,32 @@ static void conjunction() {
  */
 static void disjunction() {
     conjunction();
-    while (parser.current.type == TOKEN_OR) {
-        nextsym();
+    while (match(TOKEN_OR)) {
         conjunction();
     }
 }
 
-
-static void expression() {
-
+static void input() {
+    match(TOKEN_STRING);
 }
 
+static void expression() {
+    if (match(TOKEN_INPUT)) {
+        input();
+    } else {
+        disjunction();
+    }
+}
+
+static void statement() {
+    if (match(TOKEN_SHORT)) {
+        declare_statement();
+    } else if
+}
+
+static void program() {
+    while (peek().type != TOKEN_EOF) {
+        statement();
+    }
+}
 

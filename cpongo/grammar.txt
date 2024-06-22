@@ -26,7 +26,7 @@ smash_statement = "smash", VARNAME ;
 
 expression = disjunction | input ;
 
-input = "input", string ;
+input = "input", [ string ] ;
 
 disjunction = conjunction, { "|", conjunction } ;
 conjunction = equality, { "&", equality } ;
