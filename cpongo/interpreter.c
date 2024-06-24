@@ -161,13 +161,69 @@ static void full_scan(const char *source) {
     cvector_shrink_to_fit(tokens);
 }
 
+static void store_labels() {
+    bool seen_lbl = false;
+    for (int i = 0; i < cvector_size(tokens); ++i) {
+        Token t = *cvector_at(tokens, i);
+
+        if (t.type == TOKEN_LABEL) {
+            seen_lbl = true;
+            continue;
+        } else if (t.type == TOKEN_IDENTIFIER && seen_lbl) {
+
+        }
+    }
+}
+
 void interpret(const char *source) {
     full_scan(source);
 
     for (int i = 0; i < cvector_size(tokens); ++i) {
-        print_token(cvector_at(tokens, i));
+        Token current = *cvector_at(tokens, i);
+
+        switch (current.type) {
+            case TOKEN_EOF:
+            case TOKEN_EXIT:
+                goto END;
+            case TOKEN_SEMICOLON:
+            case TOKEN_LABEL:
+                continue;
+            case TOKEN_GOTO:
+                // TODO goto
+                break;
+            case TOKEN_THENGOTO:
+                // TODO thengoto
+                break;
+            case TOKEN_SHORT:
+                // TODO var declaration
+                break;
+            case TOKEN_IDENTIFIER:
+                // TODO var reassignment
+                break;
+            case TOKEN_PRINT:
+                // TODO print statement
+                break;
+            case TOKEN_PRINTLN:
+                // TODO println statement
+                break;
+            case TOKEN_CLOCK:
+                // TODO clock
+                break;
+            case TOKEN_SMASHALL:
+                // TODO smashall
+                break;
+            case TOKEN_SMASH:
+                // TODO smash
+                break;
+            case TOKEN_UNKNOWN:
+                // TODO unrecognized token err
+                break;
+            default:
+                break; // eval expression? thengoto?
+        }
     }
 
+    END:
     printf("\n\nProgram exited successfully.\n");
 }
 
