@@ -11,7 +11,6 @@
 #define CVECTOR_LOGARITHMIC_GROWTH
 
 cvector_vector_type(Token) tokens = NULL;
-// (80 tokens per instruction, 400 instructions)
 
 static void print_token(const Token *t) {
     char type_string[80] = {0};
@@ -150,10 +149,6 @@ static void print_tokens(const char *source) {
     printf("\n\n");
 }
 
-static void branch(const Token *t) {
-    // TODO
-}
-
 static void full_scan(const char *source) {
     init_scanner(source);
     Token t;
@@ -173,7 +168,6 @@ void interpret(const char *source) {
         print_token(cvector_at(tokens, i));
     }
 
-    EXIT:
     printf("\n\nProgram exited successfully.\n");
-    // TODO maybe remove this before merging to main
 }
+
