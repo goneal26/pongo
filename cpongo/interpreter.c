@@ -6,8 +6,11 @@
 #include "common.h"
 #include "scanner.h"
 #include <string.h>
+#include "cvector.h"
 
-Token instructions[80][400]; // TODO hardcoded size for now, will use cvector later?
+#define CVECTOR_LOGARITHMIC_GROWTH
+
+cvector_vector_type(Token) tokens = NULL;
 // (80 tokens per instruction, 400 instructions)
 
 static void print_token(const Token *t) {
@@ -121,6 +124,9 @@ static void print_token(const Token *t) {
         case TOKEN_EOF:
             strcpy(type_string, "EOF");
             break;
+        default:
+            strcpy(type_string, "Unknown");
+            break;
     }
 
     printf("{%s} ", type_string);
@@ -152,36 +158,19 @@ static void full_scan(const char *source) {
     init_scanner(source);
     Token t;
 
-    int token_counter = 0;
-    int instruction_counter = 0;
     do {
         t = scan_token();
-
-        instructions[instruction_counter][token_counter] = t;
-
-        if (t.type == TOKEN_SEMICOLON) {
-            instruction_counter++;
-        }
-
-        token_counter++;
+        cvector_push_back(tokens, t);
     } while (t.type != TOKEN_EOF);
+
+    cvector_shrink_to_fit(tokens);
 }
 
 void interpret(const char *source) {
     full_scan(source);
 
-    for (int pc = 0; pc < 80; pc++) {
-        for (int i = 0; i < 400; i++) {
-            Token t = instructions[pc][i];
-            print_token(&t);
-            if (t.type == TOKEN_SEMICOLON) {
-                printf("\n");
-                pc++;
-            }
-            if (t.type == TOKEN_EOF) {
-                goto EXIT; // wow, a valid use of a goto!
-            }
-        }
+    for (int i = 0; i < cvector_size(tokens); ++i) {
+        print_token(cvector_at(tokens, i));
     }
 
     EXIT:
