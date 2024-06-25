@@ -175,6 +175,10 @@ static void store_labels() {
     }
 }
 
+static void exit_program() {
+    // TODO free everything, exit 0
+}
+
 void interpret(const char *source) {
     full_scan(source);
 
