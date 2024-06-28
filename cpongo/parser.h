@@ -5,6 +5,6 @@
 #ifndef CPONGO_PARSER_H
 #define CPONGO_PARSER_H
 
-#include "scanner.h"
+void init_parser(const char *source);
 
 #endif //CPONGO_PARSER_H
