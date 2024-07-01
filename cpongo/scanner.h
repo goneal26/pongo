@@ -69,5 +69,6 @@ typedef struct {
 
 void init_scanner(const char *source);
 Token scan_token();
+void print_token(const Token *t);
 
 #endif //CPONGO_SCANNER_H

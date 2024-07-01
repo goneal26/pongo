@@ -8,5 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #endif //CPONGO_COMMON_H
