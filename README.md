@@ -8,8 +8,8 @@ This language isn't meant to be taken too seriously ;)
 Prerequisite: have Go installed (version 1.18 or higher)
 
  1) Clone this repository
- 2) Navigate to this repository's directory and run `go build`
- 3) A new binary file will be created for you to add to your path
+ 2) Navigate to this repository's directory and run `go build -o bin/`
+ 3) A new binary file called "pongo" will be created in the "bin" directory for you to add to your path
  4) Now, run `pongo [filename].pgo` on any Pongo scripts you write to run the interpreter! (`.pgo` is Pongo's file extension)
 
 ## Features

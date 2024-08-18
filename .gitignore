@@ -23,3 +23,9 @@ go.work.sum
 
 # env file
 .env
+
+# Ignore everything in the bin directory
+bin/*
+
+# Don't ignore .gitkeep
+!bin/.gitkeep
