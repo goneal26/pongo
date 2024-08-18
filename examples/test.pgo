@@ -1,8 +1,0 @@
-
-
-buff z = 3;
-
-z @ 2 = 13;
-
-println z @ 2;
-println (z @ 2) @ 2;
