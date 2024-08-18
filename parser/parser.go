@@ -23,7 +23,6 @@ const (
   SUM // +
   PRODUCT // *
   PREFIX // -X or !X or sizeof X
-  CALL // add(x, y)
   AT // buff @ 3
 )
 

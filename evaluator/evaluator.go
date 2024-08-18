@@ -91,7 +91,7 @@ func Eval(node ast.Node, env *object.Environment, start time.Time) object.Object
 
     case *ast.IfgotoStatement:
       condition := Eval(node.Condition, env, start)
-      if condition == TRUE {
+      if condition == TRUE || condition.(*object.Short).Value == -1 {
         val, ok := env.Get(node.Destination.Value)
         if !ok {
           error.Fatal(node.Token.LineNumber, "variable %s not found", 
@@ -135,7 +135,11 @@ func Eval(node ast.Node, env *object.Environment, start time.Time) object.Object
     case *ast.LblStatement:
       var val object.Object
       if node.Value != nil {
-        val = Eval(node.Value, env, start)
+        temp := Eval(node.Value, env, start)
+        if temp.(*object.Short).Value < 0 {
+          error.Fatal(node.Token.LineNumber, "cannot assign negative value to label (must be within 0 or 32767)")
+        }
+        val = &object.Lbl{Value: temp.(*object.Short).Value}
       } else {
         val = &object.Lbl{Value: int16(pc)}
       }
@@ -210,8 +214,19 @@ func Eval(node ast.Node, env *object.Environment, start time.Time) object.Object
 
       } else {
         val := Eval(node.Value, env, start)
+
+        // buff resizing
+        variable, ok := env.Get(node.Name.Value)
+        if !ok {
+          error.Fatal(node.Token.LineNumber, "variable %s not found", node.Name.Value)
+        }
+
+        if variable.Type() == object.BUFF_OBJ {
+          error.Fatal(node.Token.LineNumber, "cannot resize buff object")
+        }
+
         if !env.Set(node.Name.Value, val) {
-          error.Fatal(node.Token.LineNumber, "variable %s not found/is a label", node.Name.Value)
+          error.Fatal(node.Token.LineNumber, "%s is a label and cannot be reassigned", node.Name.Value)
         }
         return nil
       }
