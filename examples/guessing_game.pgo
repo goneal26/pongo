@@ -1,0 +1,38 @@
+# a simple guessing game
+println "Welcome to the guessing game!";
+
+short solution = +(rand % 100);
+
+println "I am thinking of a number between 1 and 100.";
+
+short guess;
+short count = 0;
+
+lbl GAMELOOP;
+  print "Your guess: ";
+  guess = input;
+  count = count + 1;
+  if guess < solution goto TOOSMALL;
+  if guess > solution goto TOOBIG;
+goto WIN;
+
+lbl TOOSMALL;
+  println "Your guess was too small, try again!";
+goto GAMELOOP;
+
+lbl TOOBIG;
+  println "Your guess was too big, try again!";
+goto GAMELOOP;
+
+lbl WIN;
+  println;
+  println "You guessed it!";
+  print "The number was: ";
+  print solution;
+  println;
+  print "You got it in ";
+  print count;
+  print " attempts!";
+  println;
+  smashall;
+exit;

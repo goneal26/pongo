@@ -1,7 +1,0 @@
-goto MAIN;
-
-lbl MAIN;
-
-# put whatever you want in here
-
-exit;
