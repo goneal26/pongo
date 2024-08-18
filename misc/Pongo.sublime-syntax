@@ -8,9 +8,9 @@ file_extensions:
 scope: source.pongo
 contexts:
   main:
-    - match: '\b(goto|lbl|thengoto|short)\b'
+    - match: '\b(goto|lbl|if|short|buff)\b'
       scope: keyword.control.pongo # "red"
-    - match: '\b(<=|>=|==|+|-|*|/|%|=)\b'
+    - match: '\b(<=|>=|==|+|-|*|/|%|=|@|sizeof)\b'
       scope: keyword.operator.pongo # white
     - match: '"[^"]*"'
       scope: string.quoted.double.pongo # green
