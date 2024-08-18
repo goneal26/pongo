@@ -19,4 +19,4 @@ Prerequisite: have Go installed (version 1.18 or higher)
  - the `@` operator for checking single boolean flags as well as for buff indexing
  - NO scoping, variables can be freed (or "smashed") at any point in the program's evaluation.
 
-Read SPECIFICATION.md for more information. For syntax highlighting for Sublime Text, check the `misc` directory. For some example pongo scripts, check the `examples` directory.
+Read SPECIFICATION.md (TODO) for more information. For syntax highlighting for Sublime Text, check the `misc` directory. For some example pongo scripts, check the `examples` directory.
