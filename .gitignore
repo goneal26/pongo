@@ -29,3 +29,6 @@ bin/*
 
 # Don't ignore .gitkeep
 !bin/.gitkeep
+
+# ignore test.pgo file
+test.pgo
