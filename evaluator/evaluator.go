@@ -1,5 +1,7 @@
 package evaluator
 
+// TODO really need to clean this up it's a mess
+
 import (
   "pongo/ast"
   "pongo/object"
@@ -184,7 +186,7 @@ func Eval(node ast.Node, env *object.Environment, start time.Time) object.Object
 
           val := Eval(node.Value, env, start)
           name.(*object.Buff).Value[index.(*object.Short).Value] = val
-          // TODO expecting a bug here ^^^
+          // TODO if val is a buff it should copy it, not pass a reference
           return nil
         }
 
