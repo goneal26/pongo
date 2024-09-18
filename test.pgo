@@ -1,0 +1,38 @@
+# testing buffs, shall we?
+
+# create a buff of size 3
+buff x = 3;
+println x;
+
+# now check sizeof
+println sizeof x;
+
+println sizeof 3; 
+# TODO rework sizeof to make iteration more convenient
+# (for example, rn short -> 16 and buff -> len of buff, make these more consistent maybe?)
+
+# now check expr in assign
+short i = 1;
+x @ i + 1 = 33;
+println x;
+
+# now check this
+println x @ (i + 1);
+# x @ i + 1 => (x @ i) + 1, TODO maybe change?
+# eg) make @ a lower prec, so "x @ i + 1" is always x @ (i + 1)?
+
+# x = 5;
+# println x;
+# TODO resizing buffs
+
+# TODO storing nested buffs
+# buff y = 3;
+# x @ 1 = y;
+
+# TODO print buffs with delims? in brackets? not sure...
+# TODO rework unary plus to work like in C (i.e. a no-op)
+# TODO goback/return and a simple stack
+# TODO optional line numbers? (like in BASIC)
+# TODO repl similar to TinyBASIC terminal
+# TODO proper if-statements
+#   - i.e. instead of if-then-goto, just do if-then-(statement), which can be a goto?

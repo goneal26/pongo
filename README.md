@@ -1,8 +1,10 @@
 # The Pongo Programming Language
 
-Pongo is a simple, 16-bit interpreted programming language. An initial proof-of-concept was written in pure C, with the latest version being written in Go. The language is inherently non-structured, and relies heavily on bitwise operations.
+**Version b1.0**
 
-This language isn't meant to be taken too seriously ;)
+Pongo is a simple, 16-bit toy programming language. An initial proof-of-concept was written in pure C, with the latest version being written in Go. The language is inherently non-structured (similar to TinyBASIC), and relies heavily on bitwise operations. 
+
+This language is still being actively worked on- the beta I have released so far is just the minimal working version and more features are on the way (see the *Roadmap* section).
 
 ## Installation
 Prerequisite: have Go installed (version 1.18 or higher)
@@ -20,3 +22,14 @@ Prerequisite: have Go installed (version 1.18 or higher)
  - NO scoping, variables can be freed (or "smashed") at any point in the program's evaluation.
 
 Read SPECIFICATION.md for more information. For syntax highlighting for Sublime Text, check the `misc` directory. For some example pongo scripts, check the `examples` directory.
+
+## Roadmap
+ - [x] Operator Precedence Parsing (Go rewrite)
+ - [x] List type (`buff`)
+ - [x] `sizeof` unary operator
+ - [x] Bit-index operator (`@`)
+ - [ ] Lists that can contain lists
+ - [ ] List resizing
+ - [ ] TinyBASIC-style repl
+ - [ ] Basic call-stack and returning for `goto`
+ - [ ] Proper if-statements (instead of "if x then goto (label)" just "if x then (statement)")
