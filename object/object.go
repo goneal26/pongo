@@ -36,16 +36,23 @@ func (l *Lbl) Inspect() string { return fmt.Sprintf("%d", l.Value) }
 func (l *Lbl) Type() ObjectType { return LBL_OBJ }
 
 type Buff struct {
-  Elements []int16 // TODO maybe this will work better?
+  Value []Object 
   Size int16
 }
 func (b *Buff) Inspect() string { 
   var out bytes.Buffer
 
-  for _, v := range b.Elements {
-    out.WriteString(fmt.Sprintf("%d", v))
-    out.WriteString(" ")
+  out.WriteString("[")
+
+  for i, v := range b.Value {
+    out.WriteString(fmt.Sprintf("%s", v.Inspect()))
+    
+    if i < len(b.Value) - 1 {
+      out.WriteString(" ")
+    }
   }
+
+  out.WriteString("]")
 
   return out.String()
 }

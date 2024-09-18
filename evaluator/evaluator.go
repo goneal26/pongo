@@ -34,7 +34,7 @@ func Eval(node ast.Node, env *object.Environment, start time.Time) object.Object
       newbuff = &object.Buff{Size: length.(*object.Short).Value}
 
       for i := 0; i < int(length.(*object.Short).Value); i++ {
-        newbuff.(*object.Buff).Elements = append(newbuff.(*object.Buff).Elements, 0)
+        newbuff.(*object.Buff).Value = append(newbuff.(*object.Buff).Value, &object.Short{Value: 0})
       }
 
       if !env.Add(node.Name.Value, newbuff) {
@@ -183,7 +183,8 @@ func Eval(node ast.Node, env *object.Environment, start time.Time) object.Object
           }
 
           val := Eval(node.Value, env, start)
-          name.(*object.Buff).Elements[index.(*object.Short).Value] = val.(*object.Short).Value
+          name.(*object.Buff).Value[index.(*object.Short).Value] = val
+          // TODO expecting a bug here ^^^
           return nil
         }
 
@@ -306,7 +307,7 @@ func evalBuffAtExpression(left object.Object, right object.Object) (object.Objec
     return nil, false // out of bounds
   }
 
-  return &object.Short{Value: left.(*object.Buff).Elements[right.(*object.Short).Value]}, true
+  return left.(*object.Buff).Value[right.(*object.Short).Value], true
 }
 
 func evalShortInfixExpression(operator string, left object.Object, right object.Object) (object.Object, bool) {
