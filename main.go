@@ -9,15 +9,20 @@ import (
   "pongo/parser"
   "pongo/evaluator"
   "pongo/object"
+  "pongo/shell"
 )
 
 func main() {
   // verify correct num of command args
   argLength := len(os.Args)
   if argLength != 2 {
+    /*
     fmt.Println("Error: Incorrect number of command arguments.")
     fmt.Println("Usage: pongo [filename]")
     os.Exit(1)
+    */
+    // testing shell/repl here for now, TODO proper shell init
+    shell.Start(os.Stdin, os.Stdout)
   }
 
   // verify file extension is .pgo
